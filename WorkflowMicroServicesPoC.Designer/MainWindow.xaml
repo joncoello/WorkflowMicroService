@@ -1,0 +1,29 @@
+﻿<Window x:Class="WorkflowMicroServicesPoC.Designer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WorkflowMicroServicesPoC.Designer"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="1200">
+    <StackPanel>
+        <StackPanel Name="stkMain" Orientation="Horizontal" MouseDown="StackPanel_MouseDown" MouseMove="stkMain_MouseMove">
+            <Button Name="cmdLoad" Click="cmdLoad_Click" >
+                Load
+            </Button>
+            <Button Name="cmdSave" Click="cmdSave_Click">
+                Save
+            </Button>
+            <Button Name="cmdRun" Click="cmdRun_Click">
+                Run
+            </Button>
+        </StackPanel>
+        <Grid Name="grid1" Height="500">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+        </Grid>
+    </StackPanel>
+</Window>
