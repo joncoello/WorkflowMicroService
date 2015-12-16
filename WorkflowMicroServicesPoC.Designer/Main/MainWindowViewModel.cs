@@ -19,6 +19,7 @@ using System.Text;
 using System.Windows;
 using System.Xaml;
 using WorkflowMicroServicesPoC.ActivityLibrary;
+using WorkflowMicroServicesPoC.Designer.Main;
 
 namespace WorkflowMicroServicesPoC.Designer
 {
@@ -103,7 +104,8 @@ namespace WorkflowMicroServicesPoC.Designer
 
                 var description = Path.GetFileNameWithoutExtension(file);
 
-                var result = this.CompileAssembly(xaml, description, description, file);
+                var compiler = new XamlActivityCompiler();
+                var result = compiler.Compile(xaml, description, description, file);
 
                 foreach (CompilerError error in result.Errors)
                 {
@@ -115,45 +117,7 @@ namespace WorkflowMicroServicesPoC.Designer
 
         }
 
-        private CompilerResults CompileAssembly(string xaml, string description, string activityName, string fileName)
-        {
-            string source;
-            using (var sr = new StreamReader(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "template.txt")))
-            {
-                xaml = xaml != null ? xaml.Replace('"', char.Parse("'")) : null;
-                description = description != null ? description.Replace('"', char.Parse("'")) : null;
-                activityName = activityName != null ? activityName.Replace('"', char.Parse("'")) : null;
-
-                source = sr.ReadToEnd();
-                source = source.Replace("{0}", xaml);
-                source = source.Replace("{1}", description);
-                source = source.Replace("{2}", activityName);
-            }
-
-            fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "customactivity." + Path.GetFileNameWithoutExtension(fileName) + ".dll");
-
-            var codeDomProvider = new CSharpCodeProvider();
-            var compilerParams = new CompilerParameters
-            {
-                OutputAssembly = fileName,
-                GenerateExecutable = false,
-                GenerateInMemory = false,
-                IncludeDebugInformation = false
-            };
-
-            compilerParams.ReferencedAssemblies.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WorkflowMicroServicesPoC.Interfaces.dll"));
-            compilerParams.ReferencedAssemblies.Add("System.dll");
-            compilerParams.ReferencedAssemblies.Add("System.Core.dll");
-            compilerParams.ReferencedAssemblies.Add("System.Drawing.dll");
-            compilerParams.ReferencedAssemblies.Add(@"WPF\WindowsBase.dll");
-            compilerParams.ReferencedAssemblies.Add("System.Activities.dll");
-            compilerParams.ReferencedAssemblies.Add("System.Activities.Core.Presentation.dll");
-            compilerParams.ReferencedAssemblies.Add("System.Activities.Presentation.dll");
-            compilerParams.ReferencedAssemblies.Add("System.Xml.dll");
-            compilerParams.ReferencedAssemblies.Add("System.Xaml.dll");
-
-            return codeDomProvider.CompileAssemblyFromSource(compilerParams, source);
-        }
+       
 
         private void AddToolBox()
         {

@@ -8,20 +8,20 @@
         Title="{Binding Title}" Height="600" Width="1200" WindowState="Maximized">
     <Grid Name="grid1">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="30" />
-            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="240" />
             <ColumnDefinition Width="2*" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <StackPanel Name="stkMain">
-            <Button Name="cmdNew" Click="cmdNew_Click" >
+        <StackPanel Name="stkMain" Margin="5">
+            <Button Name="cmdNew" Click="cmdNew_Click" Margin="0,0,0,5">
                 New
             </Button>
-            <Button Name="cmdLoad" Click="cmdLoad_Click" >
+            <Button Name="cmdLoad" Click="cmdLoad_Click" Margin="0,0,0,5">
                 Load
             </Button>
-            <Button Name="cmdSave" Click="cmdSave_Click">
+            <Button Name="cmdSave" Click="cmdSave_Click" Margin="0,0,0,5">
                 Save
             </Button>
             <Button Name="cmdRun" Click="cmdRun_Click">
@@ -29,9 +29,9 @@
             </Button>
         </StackPanel>
 
-        <ContentControl Grid.Column="1" Content="{Binding Toolbox}" />
-        <ContentControl Grid.Column="2" Content="{Binding Designer.View}" />
-        <ContentControl Grid.Column="3" Content="{Binding PropertyInspector}" />
+        <ContentControl Grid.Column="1" Content="{Binding Toolbox}" Margin="5" />
+        <ContentControl Grid.Column="2" Content="{Binding Designer.View}" Margin="5" />
+        <ContentControl Grid.Column="3" Content="{Binding PropertyInspector}" Margin="5" />
 
 
     </Grid>
