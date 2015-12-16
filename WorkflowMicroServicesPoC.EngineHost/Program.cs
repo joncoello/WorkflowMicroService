@@ -46,6 +46,8 @@ namespace WorkflowMicroServicesPoC.EngineHost
                 xamlData = sr.ReadToEnd();
             }
 
+            Console.WriteLine(xamlData);
+
             Byte[] byteArray = Encoding.ASCII.GetBytes(xamlData);
             MemoryStream memoryStream = new MemoryStream(byteArray);
             XamlXmlReaderSettings settings = GetXamlXmlReaderSettings();
