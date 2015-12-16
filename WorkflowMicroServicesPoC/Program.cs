@@ -27,7 +27,8 @@ namespace WorkflowMicroServicesPoC
             container.Register(Component.For<ILogger>().ImplementedBy<Logger>());
             
             var applicationRoot = container.Resolve<ApplicationRoot>();
-            applicationRoot.Run();
+            var assemblies = applicationRoot.Run();
+            assemblies.ToList().ForEach(a => container.Register(AllTypes.FromAssembly(a).BasedOn<IHttpController>().LifestyleTransient()));
 
             // web api self host
             var config = new HttpSelfHostConfiguration("http://localhost:8080");

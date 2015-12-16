@@ -1,0 +1,51 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Activities.Presentation;
+using System.Windows;
+using System.Activities;
+using System.ComponentModel;
+using System.Activities.XamlIntegration;
+using WorkflowMicroServicesPoC.Interfaces;
+using System.IO;
+
+namespace DynamicActivities
+{
+	public class CompiledActivity : IActivityTemplateFactory
+	{
+		private readonly string xaml = @"{0}";
+		private readonly string description = @"{1}";
+		private readonly string activityName = @"{2}";
+
+		public Activity Create(DependencyObject target)
+		{
+			DynamicActivity dynamicActivity = ActivityXamlServices.Load(new StringReader(this.xaml)) as DynamicActivity;
+			return new PlaceholderActivity(dynamicActivity);
+		}
+
+		public string ActivityName
+		{
+			get
+			{
+				return this.activityName;
+			}
+		}
+
+		public string XAML
+		{
+			get
+			{
+				return this.xaml;
+			}
+		}
+
+		public string Description
+		{
+			get 
+			{
+				return this.description;
+			}
+		}
+	}
+}

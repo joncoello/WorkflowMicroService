@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{76BB1EAE-62D7-48B4-83E1-A585B7CF7420}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{F43F0A28-4258-46F3-A52C-A667A0D228F9}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WorkflowMicroServicesPoC.Interfaces</RootNamespace>
-    <AssemblyName>WorkflowMicroServicesPoC.Interfaces</AssemblyName>
+    <RootNamespace>WorkflowMicroServicesPoC.EngineHost</RootNamespace>
+    <AssemblyName>WorkflowMicroServicesPoC.EngineHost</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,7 +34,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Activities" />
-    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Activities.Core.Presentation" />
+    <Reference Include="System.Activities.Presentation" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -40,12 +43,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="test">
+      <HintPath>..\..\CompileExample\CompileExample\bin\Debug\test.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodeActivity1.cs" />
-    <Compile Include="ILogger.cs" />
-    <Compile Include="IPlugin.cs" />
-    <Compile Include="PlaceholderActivity.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

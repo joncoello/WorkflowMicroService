@@ -2,6 +2,8 @@
 using System.Linq;
 using System.ComponentModel.Composition.Hosting;
 using WorkflowMicroServicesPoC.Interfaces;
+using System.Reflection;
+using System.Collections.Generic;
 
 namespace WorkflowMicroServicesPoC
 {
@@ -15,9 +17,15 @@ namespace WorkflowMicroServicesPoC
             logger.Log("application root created");
         }
 
-        internal void Run()
+        internal IEnumerable<Assembly> Run()
         {
-            
+            string path = AppDomain.CurrentDomain.BaseDirectory;
+            var catalog = new DirectoryCatalog(path);
+            var container = new CompositionContainer(catalog);
+            var plugins = container.GetExports<IPlugin>().ToList().Select(l=>l.Value).ToList();
+            plugins.ForEach(p => Console.WriteLine(p.GetType().FullName));
+
+            return plugins.Select(p => p.GetType().Assembly).Distinct();
             
         }
 

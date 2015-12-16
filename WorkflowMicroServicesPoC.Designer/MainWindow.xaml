@@ -6,8 +6,18 @@
         xmlns:local="clr-namespace:WorkflowMicroServicesPoC.Designer"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="1200">
-    <StackPanel>
-        <StackPanel Name="stkMain" Orientation="Horizontal" MouseDown="StackPanel_MouseDown" MouseMove="stkMain_MouseMove">
+    <Grid Name="grid1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="30" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Name="stkMain">
+            <Button Name="cmdNew" Click="cmdNew_Click" >
+                New
+            </Button>
             <Button Name="cmdLoad" Click="cmdLoad_Click" >
                 Load
             </Button>
@@ -18,12 +28,6 @@
                 Run
             </Button>
         </StackPanel>
-        <Grid Name="grid1" Height="500">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="3*" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-        </Grid>
-    </StackPanel>
+
+    </Grid>
 </Window>
