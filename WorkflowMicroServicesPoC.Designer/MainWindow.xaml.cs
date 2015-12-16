@@ -23,6 +23,7 @@ using System.Xaml;
 using Microsoft.CSharp;
 using System.CodeDom.Compiler;
 using System.Diagnostics;
+using WorkflowMicroServicesPoC.ActivityLibrary;
 
 namespace WorkflowMicroServicesPoC.Designer
 {
@@ -141,6 +142,11 @@ namespace WorkflowMicroServicesPoC.Designer
                     new ToolboxItemWrapper(typeof(Rethrow), "Rethrow", "Rethrow"),
                     new ToolboxItemWrapper(typeof(Throw), "Throw", "Throw"),
                     new ToolboxItemWrapper(typeof(TryCatch), "TryCatch", "TryCatch")
+                },
+                new ToolboxCategory("CCH")
+                {
+                    new ToolboxItemWrapper(typeof(CreateClient), "CreateClient", "CreateClient"),
+                    new ToolboxItemWrapper(typeof(CreateTask), "CreateTask", "CreateTask")
                 }
             };
 
@@ -379,6 +385,7 @@ namespace WorkflowMicroServicesPoC.Designer
         private void cmdLoad_Click(object sender, RoutedEventArgs e)
         {
             AddDesigner(false);
+            AddPropertyInspector();
             var ofd = new OpenFileDialog();
             ofd.Filter = "Xaml File | .xaml";
             ofd.ShowDialog();
