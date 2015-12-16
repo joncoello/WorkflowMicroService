@@ -29,9 +29,10 @@
             </Button>
         </StackPanel>
 
-        <ContentControl Grid.Column="1" Content="{Binding Toolbox}">
-            
-        </ContentControl>
+        <ContentControl Grid.Column="1" Content="{Binding Toolbox}" />
+        <ContentControl Grid.Column="2" Content="{Binding Designer.View}" />
+        <ContentControl Grid.Column="3" Content="{Binding PropertyInspector}" />
+
 
     </Grid>
 </Window>

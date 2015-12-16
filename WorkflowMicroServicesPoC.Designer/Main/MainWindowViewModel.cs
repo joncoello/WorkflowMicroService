@@ -1,4 +1,5 @@
 ﻿using Microsoft.CSharp;
+using Microsoft.Win32;
 using System;
 using System.Activities;
 using System.Activities.Presentation;
@@ -8,26 +9,55 @@ using System.Activities.Statements;
 using System.Activities.XamlIntegration;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Resources;
 using System.Text;
+using System.Windows;
 using System.Xaml;
 using WorkflowMicroServicesPoC.ActivityLibrary;
 
 namespace WorkflowMicroServicesPoC.Designer
 {
-    public class MainWindowViewModel
+    public class MainWindowViewModel : INotifyPropertyChanged
     {
+        private WorkflowDesigner _wd;
+        
         public string Title { get; private set; }
         public ToolboxControl Toolbox { get; private set; }
+
+        private object _designer;
+        public object Designer {
+            get { return _designer; }
+            set {
+                _designer = value;
+                FirePropertyChanged("Designer");
+            }
+        }
+
+        private UIElement _propertyInspector;
+        public UIElement PropertyInspector {
+            get { return _propertyInspector; }
+            set {
+                _propertyInspector = value;
+                FirePropertyChanged("PropertyInspector");
+            }
+        }
 
         public MainWindowViewModel()
         {
             this.Title = "Activity Designer";
 
+            LoadCustomActivities();
             AddToolBox();
+
+            // Add the WFF Designer
+            AddDesigner(true);
+
+            AddPropertyInspector();
         }
 
         #region toolbox
@@ -52,8 +82,8 @@ namespace WorkflowMicroServicesPoC.Designer
                 XamlServices.Save(xamlWriter, def);
 
                 var xaml = sb.ToString();
+
                 var description = Path.GetFileNameWithoutExtension(file);
-                //var fileName = Path.Combine(Path.GetTempPath(), string.Format("{0}.dll", Guid.NewGuid().ToString()));
 
                 var result = this.CompileAssembly(xaml, description, description, file);
 
@@ -273,7 +303,106 @@ namespace WorkflowMicroServicesPoC.Designer
             }
 
             return activities;
-        } 
+        }
+        #endregion
+
+        #region events
+
+        public void LoadClicked()
+        {
+
+            AddDesigner(false);
+            AddPropertyInspector();
+            var ofd = new OpenFileDialog();
+            ofd.Filter = "Xaml File | *.xaml";
+            ofd.InitialDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Activities");
+            var result = ofd.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                _wd.Load(ofd.FileName);
+            }
+            Designer = _wd;
+            PropertyInspector = _wd.PropertyInspectorView;
+
+        }
+
+        public void NewClicked()
+        {
+            AddDesigner(true);
+        }
+
+        public void SaveClicked()
+        {
+
+            var sfd = new SaveFileDialog();
+            sfd.Filter = "Xaml File | *.xaml";
+            sfd.InitialDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Activities");
+            sfd.ShowDialog();
+
+            _wd.Save(sfd.FileName);
+
+            System.Windows.Forms.MessageBox.Show("Done");
+        }
+
+        internal void RunClicked()
+        {
+            var ofd = new OpenFileDialog();
+            ofd.Filter = "Xaml File | .xaml";
+            ofd.ShowDialog();
+
+            string fileName = ofd.FileName;
+
+            Process.Start("WorkflowMicroServicesPoC.EngineHost.exe", fileName);
+        }
+
+        #endregion
+
+        #region designer / property
+
+        private void AddDesigner(bool loadBlank)
+        {
+            //Create an instance of WorkflowDesigner class.
+            _wd = new WorkflowDesigner();
+
+            //Load a new Sequence as default.
+            if (loadBlank)
+            {
+
+                ActivityBuilder activityBuilderType = new ActivityBuilder();
+                activityBuilderType.Name = "Activity Builder";
+                activityBuilderType.Implementation = new Flowchart()
+                {
+                    DisplayName = "Default Template"
+                };
+
+                _wd.Load(activityBuilderType);
+                
+            }
+
+            Designer = _wd;
+            PropertyInspector = _wd.PropertyInspectorView;
+
+        }
+
+        private void AddPropertyInspector()
+        {
+            PropertyInspector = _wd.PropertyInspectorView;
+        }
+
+        #endregion
+
+        #region property changed
+
+        private void FirePropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         #endregion
 
     }
