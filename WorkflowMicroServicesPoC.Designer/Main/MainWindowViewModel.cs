@@ -24,28 +24,44 @@ namespace WorkflowMicroServicesPoC.Designer
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
+        #region deslarations
+
         private WorkflowDesigner _wd;
-        
+        private string _fileName;
+
+        #endregion
+
+        #region properties
+
         public string Title { get; private set; }
         public ToolboxControl Toolbox { get; private set; }
 
         private object _designer;
-        public object Designer {
+        public object Designer
+        {
             get { return _designer; }
-            set {
+            set
+            {
                 _designer = value;
                 FirePropertyChanged("Designer");
             }
         }
 
         private UIElement _propertyInspector;
-        public UIElement PropertyInspector {
+        
+        public UIElement PropertyInspector
+        {
             get { return _propertyInspector; }
-            set {
+            set
+            {
                 _propertyInspector = value;
                 FirePropertyChanged("PropertyInspector");
             }
         }
+
+        #endregion
+
+        #region constructor
 
         public MainWindowViewModel()
         {
@@ -59,6 +75,8 @@ namespace WorkflowMicroServicesPoC.Designer
 
             AddPropertyInspector();
         }
+
+        #endregion
 
         #region toolbox
 
@@ -265,7 +283,7 @@ namespace WorkflowMicroServicesPoC.Designer
         private void AddCustomToolboxItems(ToolboxControl tc)
         {
             var cat = new ToolboxCategory("Custom Activities");
-            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "customactivities");
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Compiled");
             var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "customactivity.*.dll");
 
             foreach (var item in GetAllCompiledActivities(files))
@@ -324,6 +342,8 @@ namespace WorkflowMicroServicesPoC.Designer
             Designer = _wd;
             PropertyInspector = _wd.PropertyInspectorView;
 
+            _fileName = ofd.FileName;
+
         }
 
         public void NewClicked()
@@ -346,13 +366,10 @@ namespace WorkflowMicroServicesPoC.Designer
 
         internal void RunClicked()
         {
-            var ofd = new OpenFileDialog();
-            ofd.Filter = "Xaml File | .xaml";
-            ofd.ShowDialog();
-
-            string fileName = ofd.FileName;
-
-            Process.Start("WorkflowMicroServicesPoC.EngineHost.exe", fileName);
+            if (_fileName != null)
+            {
+                Process.Start("WorkflowMicroServicesPoC.EngineHost.exe", "\"" + _fileName + "\"");
+            }
         }
 
         #endregion
