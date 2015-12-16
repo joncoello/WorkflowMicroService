@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorkflowMicroServicesPoC.Designer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1200">
+        Title="MainWindow" Height="600" Width="1200" WindowState="Maximized">
     <Grid Name="grid1">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="30" />

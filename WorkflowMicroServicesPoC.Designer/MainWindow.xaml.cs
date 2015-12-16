@@ -22,6 +22,7 @@ using System.Text;
 using System.Xaml;
 using Microsoft.CSharp;
 using System.CodeDom.Compiler;
+using System.Diagnostics;
 
 namespace WorkflowMicroServicesPoC.Designer
 {
@@ -107,11 +108,11 @@ namespace WorkflowMicroServicesPoC.Designer
                     new ToolboxItemWrapper(typeof(FlowSwitch<>), "FlowSwitch", "FlowSwitch<T>"),
                     new ToolboxItemWrapper(typeof(FlowDecision), "FlowDecision", "FlowDecision")
                 },
-                new ToolboxCategory("Runtime")
-                {
-                    new ToolboxItemWrapper(typeof(Persist), "Persist", "Persist"),
-                    new ToolboxItemWrapper(typeof(TerminateWorkflow), "TerminateWorkflow", "TerminateWorkflow")
-                },
+                //new ToolboxCategory("Runtime")
+                //{
+                //    new ToolboxItemWrapper(typeof(Persist), "Persist", "Persist"),
+                //    new ToolboxItemWrapper(typeof(TerminateWorkflow), "TerminateWorkflow", "TerminateWorkflow")
+                //},
                 new ToolboxCategory("Primitives")
                 {
                     new ToolboxItemWrapper(typeof(Assign), "Assign", "Assign"),
@@ -120,14 +121,14 @@ namespace WorkflowMicroServicesPoC.Designer
                     new ToolboxItemWrapper(typeof(InvokeMethod), "InvokeMethod", "InvokeMethod"),
                     new ToolboxItemWrapper(typeof(WriteLine), "WriteLine", "WriteLine")
                 },
-                new ToolboxCategory("Transaction")
-                {
-                    new ToolboxItemWrapper(typeof(CancellationScope), "CancellationScope", "CancellationScope"),
-                    new ToolboxItemWrapper(typeof(CompensableActivity), "CompensableActivity", "CompensableActivity"),
-                    new ToolboxItemWrapper(typeof(Compensate), "Compensate", "Compensate"),
-                    new ToolboxItemWrapper(typeof(Confirm), "Confirm", "Confirm"),
-                    new ToolboxItemWrapper(typeof(TransactionScope), "TransactionScope", "TransactionScope")
-                },
+                //new ToolboxCategory("Transaction")
+                //{
+                //    new ToolboxItemWrapper(typeof(CancellationScope), "CancellationScope", "CancellationScope"),
+                //    new ToolboxItemWrapper(typeof(CompensableActivity), "CompensableActivity", "CompensableActivity"),
+                //    new ToolboxItemWrapper(typeof(Compensate), "Compensate", "Compensate"),
+                //    new ToolboxItemWrapper(typeof(Confirm), "Confirm", "Confirm"),
+                //    new ToolboxItemWrapper(typeof(TransactionScope), "TransactionScope", "TransactionScope")
+                //},
                 new ToolboxCategory("Collection")
                 {
                     new ToolboxItemWrapper(typeof(AddToCollection<>), "AddToCollection", "AddToCollection<T>"),
@@ -255,7 +256,8 @@ namespace WorkflowMicroServicesPoC.Designer
         private void AddCustomToolboxItems(ToolboxControl tc)
         {
             var cat = new ToolboxCategory("Custom Activities");
-            var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "customactivities");
+            var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "customactivity.*.dll");
 
             foreach (var item in GetAllCompiledActivities(files))
             {
@@ -281,8 +283,9 @@ namespace WorkflowMicroServicesPoC.Designer
                     {
                         if (type != null ? typeof(IActivityTemplateFactory).IsAssignableFrom(type) : false)
                         {
+                            string name = type.Assembly.GetName().Name.Replace("customactivity.", "");
                             var instance = ((IActivityTemplateFactory)Activator.CreateInstance(type));
-                            activities.Add("Test", type);
+                            activities.Add(name, type);
                         }
                     }
                 }
@@ -318,12 +321,17 @@ namespace WorkflowMicroServicesPoC.Designer
 
             var result = this.CompileAssembly(xaml, description, description, fileName);
 
-            foreach (CompilerError error in result.Errors)
-            {
-                System.Windows.Forms.MessageBox.Show(error.ErrorText);
-            }
+            //foreach (CompilerError error in result.Errors)
+            //{
+            //    System.Windows.Forms.MessageBox.Show(error.ErrorText);
+            //}
 
             wd.Save(sfd.FileName);
+
+            using (var sw = new StreamWriter(sfd.FileName))
+            {
+                sw.Write(wd.Text);
+            }
 
             System.Windows.Forms.MessageBox.Show("Done");
         }
@@ -343,7 +351,7 @@ namespace WorkflowMicroServicesPoC.Designer
                 source = source.Replace("{2}", activityName);
             }
 
-            fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetFileNameWithoutExtension(fileName) + ".dll");
+            fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "customactivity." + Path.GetFileNameWithoutExtension(fileName) + ".dll");
 
             var codeDomProvider = new CSharpCodeProvider();
             var compilerParams = new CompilerParameters
@@ -385,14 +393,9 @@ namespace WorkflowMicroServicesPoC.Designer
 
             string fileName = ofd.FileName;
 
-            var writer = new StringWriter();
-            var workflow = ActivityXamlServices.Load(fileName);
-            var wa = new WorkflowApplication(workflow);
-            wa.Extensions.Add(writer);
-            wa.Completed = WorkflowCompleted;
-            wa.OnUnhandledException = WorkflowUnhandledException;
-            wa.Run();
+            //fileName = "customactivity." + Path.GetFileNameWithoutExtension(fileName) + ".dll";
 
+            Process.Start("WorkflowMicroServicesPoC.EngineHost.exe", fileName);
         }
 
         private UnhandledExceptionAction WorkflowUnhandledException(WorkflowApplicationUnhandledExceptionEventArgs arg)
