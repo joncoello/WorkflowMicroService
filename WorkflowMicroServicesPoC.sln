@@ -18,6 +18,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkflowMicroServicesPoC.Designer", "WorkflowMicroServicesPoC.Designer\WorkflowMicroServicesPoC.Designer.csproj", "{95B82874-3D21-4651-ACE4-7C9FDAFF76B7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F43F0A28-4258-46F3-A52C-A667A0D228F9} = {F43F0A28-4258-46F3-A52C-A667A0D228F9}
+		{508FCB9D-9C8A-4416-AB5C-7EF8FB47CA41} = {508FCB9D-9C8A-4416-AB5C-7EF8FB47CA41}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkflowMicroServicesPoC.EngineHost", "WorkflowMicroServicesPoC.EngineHost\WorkflowMicroServicesPoC.EngineHost.csproj", "{F43F0A28-4258-46F3-A52C-A667A0D228F9}"

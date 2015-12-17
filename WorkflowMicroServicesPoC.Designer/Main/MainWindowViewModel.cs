@@ -18,7 +18,6 @@ using System.Resources;
 using System.Text;
 using System.Windows;
 using System.Xaml;
-using WorkflowMicroServicesPoC.ActivityLibrary;
 using WorkflowMicroServicesPoC.Designer.Main;
 
 namespace WorkflowMicroServicesPoC.Designer
@@ -186,13 +185,21 @@ namespace WorkflowMicroServicesPoC.Designer
                     new ToolboxItemWrapper(typeof(Rethrow), "Rethrow", "Rethrow"),
                     new ToolboxItemWrapper(typeof(Throw), "Throw", "Throw"),
                     new ToolboxItemWrapper(typeof(TryCatch), "TryCatch", "TryCatch")
-                },
-                new ToolboxCategory("CCH")
-                {
-                    new ToolboxItemWrapper(typeof(CreateClient), "CreateClient", "CreateClient"),
-                    new ToolboxItemWrapper(typeof(CreateTask), "CreateTask", "CreateTask")
                 }
+                //new ToolboxCategory("CCH")
+                //{
+                //    new ToolboxItemWrapper(typeof(CreateClient), "CreateClient", "CreateClient"),
+                //    new ToolboxItemWrapper(typeof(CreateTask), "CreateTask", "CreateTask")
+                //}
             };
+
+            var cch = new ToolboxCategory("CCH");
+            var asm = Assembly.Load("WorkflowMicroServicesPoC.ActivityLibrary");
+            asm.GetTypes().ToList().ForEach(t=> 
+                cch.Add(new ToolboxItemWrapper(t, t.Name, t.Name))
+            );
+            categories.Add(cch);
+
 
             var activityTypes = new List<ToolboxItemWrapper>();
             categories.ForEach(cat => cat.Tools.ToList().ForEach(activityTypes.Add));
