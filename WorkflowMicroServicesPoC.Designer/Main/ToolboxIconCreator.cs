@@ -11,6 +11,9 @@ using System.Text;
 
 namespace WorkflowMicroServicesPoC.Designer
 {
+    /// <summary>
+    /// correctly populate icons for standard .net activities
+    /// </summary>
     internal static class ToolboxIconCreator
     {
         public static void LoadToolboxIcons(IEnumerable<ToolboxItemWrapper> allActivityTypes, IList<ResourceReader> resourceReaders)

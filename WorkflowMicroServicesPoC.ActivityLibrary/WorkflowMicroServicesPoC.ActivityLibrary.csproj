@@ -55,12 +55,22 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WKUK.CCH.Document.DocMgmt.DocManager">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\CCH ProSystem\Deploy\WKUK.CCH.Document.DocMgmt.DocManager.dll</HintPath>
+    </Reference>
+    <Reference Include="WKUK.CCH.Document.DocMgmt.Entities">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\CCH ProSystem\Deploy\WKUK.CCH.Document.DocMgmt.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="WKUK.CCH.Document.DocMgmt.Interfaces">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\CCH ProSystem\Deploy\WKUK.CCH.Document.DocMgmt.Interfaces.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CreateAssignment.cs" />
     <Compile Include="CreateClient.cs" />
     <Compile Include="CreateTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UploadDocument.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

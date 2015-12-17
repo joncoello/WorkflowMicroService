@@ -15,6 +15,7 @@ namespace WorkflowMicroServicesPoC.ActivityLibrary
         public InArgument<int> AssignmentTypeID { get; set; }
         public InArgument<string> Code{ get; set; }
         public InArgument<string> Name { get; set; }
+        public OutArgument<int> AssignmentID { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
@@ -40,6 +41,8 @@ namespace WorkflowMicroServicesPoC.ActivityLibrary
                 };
                 
                 gateway.Save(assignment);
+
+                AssignmentID.Set(context, assignment.AssignmentId);
 
             }
             catch (Exception ex)
