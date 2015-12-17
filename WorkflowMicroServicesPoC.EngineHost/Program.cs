@@ -9,6 +9,9 @@ using System.Xaml;
 
 namespace WorkflowMicroServicesPoC.EngineHost
 {
+    /// <summary>
+    /// A host for running workflows to test the composite activties
+    /// </summary>
     class Program
     {
         static void Main(string[] args)
@@ -35,6 +38,11 @@ namespace WorkflowMicroServicesPoC.EngineHost
 
         }
 
+        /// <summary>
+        /// load worklfow definition
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         private static Activity LoadWorkflow(String fileName)
         {
 
@@ -55,6 +63,10 @@ namespace WorkflowMicroServicesPoC.EngineHost
             return workflow;
         }
 
+        /// <summary>
+        /// used to ensure the presentation refs are resolved correctly
+        /// </summary>
+        /// <returns></returns>
         private static XamlXmlReaderSettings GetXamlXmlReaderSettings()
         {
             XamlXmlReaderSettings result = new XamlXmlReaderSettings();

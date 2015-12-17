@@ -23,9 +23,12 @@ using WorkflowMicroServicesPoC.Designer.Main;
 
 namespace WorkflowMicroServicesPoC.Designer
 {
+    /// <summary>
+    /// View model fro main screen comprising the menu, the toolbox, the designer and the property inspector
+    /// </summary>
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-        #region deslarations
+        #region declarations
 
         private WorkflowDesigner _wd;
         private string _fileName;
@@ -69,14 +72,14 @@ namespace WorkflowMicroServicesPoC.Designer
             this.Title = "Activity Designer";
 
             LoadCustomActivities();
-            AddToolBox();
 
-            // Add the WFF Designer
+            AddToolBox();
+            
             AddDesigner(true);
 
             AddPropertyInspector();
         }
-
+        
         #endregion
 
         #region toolbox
@@ -84,27 +87,25 @@ namespace WorkflowMicroServicesPoC.Designer
         private void LoadCustomActivities()
         {
 
+            // delete old versions of activities
             Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "customactivity.*.dll").ToList().ForEach(f => File.Delete(f));
 
+            // get xaml activities
             string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Activities");
             var files = Directory.GetFiles(path);
             foreach (var file in files)
             {
-                var wd = new WorkflowDesigner();
-                wd.Load(file);
 
-                var def = wd.Context.Services.GetService<ModelService>().Root.GetCurrentValue();
-
-                (def as ActivityBuilder).Name = Path.GetFileNameWithoutExtension(file);
-                var sb = new StringBuilder();
-                var xamlWriter = ActivityXamlServices.CreateBuilderWriter(new IgnorableXamlXmlWriter(new StringWriter(sb), new XamlSchemaContext()));
-                XamlServices.Save(xamlWriter, def);
-
-                var xaml = sb.ToString();
-
+                string xaml;
+                using (var sr = new StreamReader(file))
+                {
+                    xaml = sr.ReadToEnd();
+                }
+                
                 var description = Path.GetFileNameWithoutExtension(file);
 
                 var compiler = new XamlActivityCompiler();
+
                 var result = compiler.Compile(xaml, description, description, file);
 
                 foreach (CompilerError error in result.Errors)
@@ -116,9 +117,7 @@ namespace WorkflowMicroServicesPoC.Designer
 
 
         }
-
-       
-
+        
         private void AddToolBox()
         {
             var tc = GetToolboxControl();

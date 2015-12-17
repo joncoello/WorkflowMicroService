@@ -42,7 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodeActivity1.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="PlaceholderActivity.cs" />
