@@ -29,7 +29,7 @@ namespace WorkflowMicroServicesPoC.Designer.Main
 
             }
 
-            fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "customactivity." + Path.GetFileNameWithoutExtension(fileName) + ".dll");
+            fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Compiled", "customactivity." + Path.GetFileNameWithoutExtension(fileName) + ".dll");
 
             var codeDomProvider = new CSharpCodeProvider();
             var compilerParams = new CompilerParameters

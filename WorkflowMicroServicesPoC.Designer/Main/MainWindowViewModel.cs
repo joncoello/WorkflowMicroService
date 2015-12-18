@@ -68,6 +68,9 @@ namespace WorkflowMicroServicesPoC.Designer
 
         public MainWindowViewModel()
         {
+
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+
             this.Title = "Activity Designer";
 
             LoadCustomActivities();
@@ -78,7 +81,32 @@ namespace WorkflowMicroServicesPoC.Designer
 
             AddPropertyInspector();
         }
-        
+
+        private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            Assembly returnValue = null;
+
+            try
+            {
+
+                string[] nameParts = args.Name.Split(',');
+                if (nameParts.Length > 0)
+                {
+                    string assemblyName = nameParts[0];
+                    if (assemblyName.StartsWith("customactivity."))
+                    {
+                        string pathToLoad = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Compiled", assemblyName + ".dll");
+                        returnValue = Assembly.LoadFrom(pathToLoad);
+                    }
+                }
+
+            }
+            catch (Exception)
+            {}
+
+            return returnValue;
+        }
+
         #endregion
 
         #region toolbox
@@ -194,7 +222,7 @@ namespace WorkflowMicroServicesPoC.Designer
             };
 
             var cch = new ToolboxCategory("CCH");
-            var asm = Assembly.Load("WorkflowMicroServicesPoC.ActivityLibrary");
+            var asm = Assembly.LoadFrom("WorkflowMicroServicesPoC.ActivityLibrary.dll");
             asm.GetTypes().ToList().ForEach(t=> 
                 cch.Add(new ToolboxItemWrapper(t, t.Name, t.Name))
             );
@@ -252,9 +280,9 @@ namespace WorkflowMicroServicesPoC.Designer
 
         private void AddCustomToolboxItems(ToolboxControl tc)
         {
-            var cat = new ToolboxCategory("Custom Activities");
+            var cat = new ToolboxCategory("Custom");
             string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Compiled");
-            var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "customactivity.*.dll");
+            var files = Directory.GetFiles(path, "customactivity.*.dll");
 
             foreach (var item in GetAllCompiledActivities(files))
             {

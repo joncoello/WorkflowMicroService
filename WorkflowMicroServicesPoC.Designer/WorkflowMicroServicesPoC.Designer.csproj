@@ -119,10 +119,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WorkflowMicroServicesPoC.ActivityLibrary\WorkflowMicroServicesPoC.ActivityLibrary.csproj">
-      <Project>{508fcb9d-9c8a-4416-ab5c-7ef8fb47ca41}</Project>
-      <Name>WorkflowMicroServicesPoC.ActivityLibrary</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WorkflowMicroServicesPoC.Interfaces\WorkflowMicroServicesPoC.Interfaces.csproj">
       <Project>{76bb1eae-62d7-48b4-83e1-a585b7cf7420}</Project>
       <Name>WorkflowMicroServicesPoC.Interfaces</Name>
